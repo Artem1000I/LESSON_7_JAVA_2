@@ -13,7 +13,7 @@ public class UerInterfaceView {
             System.out.println("Введите название города...");
             String city = scanner.nextLine();
 
-            System.out.println("Введите 1 для получение погоды на сегодня;" + "Введите 5 для прогноза погоды на 5 дней; Для выхода введите 0...:");
+            System.out.println("Введите 1 для получение погоды на сегодня;" + "Введите 5 для прогноза погоды на 5 дней; Введите 2 для получения данных из базы; Для выхода введите 0...:");
                     String command = scanner.nextLine();
 
                     if ("0".equals(command))break;
