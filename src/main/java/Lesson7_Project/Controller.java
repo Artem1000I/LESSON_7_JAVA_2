@@ -17,7 +17,7 @@ public class Controller {
     public Controller(){
         variants.put(1,NOW);
         variants.put(5,FIV_DAYS);
-
+        variants.put(2, Period.IVSB);
     }
 
     //метод
@@ -31,7 +31,11 @@ public class Controller {
                 break;
 
             case FIV_DAYS:
-                throw new IOException("This function is not implimentit yet!");
+                weatherModel.getWeather(cityName,FIV_DAYS);
+                break;
+
+            case IVSB:
+                weatherModel.getSavedToDBWeather();
         }
     }
 }

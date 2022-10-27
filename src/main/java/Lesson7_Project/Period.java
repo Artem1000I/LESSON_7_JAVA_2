@@ -1,5 +1,6 @@
 package Lesson7_Project;
 
 public enum Period {
-    NOW, FIV_DAYS   // два варианта это константы
+    NOW, IVSB, FIV_DAYS   // два варианта это константы
+
 }

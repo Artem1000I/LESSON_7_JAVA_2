@@ -8,21 +8,27 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
+import static Lesson7_Project.Period.FIV_DAYS;
+
 public class AccuwetharModel extends WeatherModel {
 
 
-    //http://dataservice.accuweather.com/forecasts/v1/daily/1day/349727   //URL с сайта на котррый будем отправлять запрос
-    private static final String PROTOCOL = "https";
+    //http://dataservice.accuweather.com/forecasts/v1/daily/1day /349727  //URL с сайта на котррый будем отправлять запрос
+    //http://dataservice.accuweather.com/forecasts/v1/daily/5day /349727
+    private static final String PROTOCOL = "http";
     private static final String BASE_HOST = "dataservice.accuweather.com";
     private static final String FORECASTS = "forecasts";
     private static final String VERSION = "v1";
     private static final String DAILY = "daily";
     private static final String ONE_DAY = "1day";
+
+    private static final String FIVE_DAYS = "5day";
     private static final String API_KEY = "kgoIoLeYhCwSPhBbayB4GqYrEAAD9zYD";  //ключ апи с сайта
     private static final String API_KEY_QUERY_PARAM = "apikey";
     private static final String LOCATIONS = "locations";
     private static final String CITIES = "cities";
     private static final String AUTOCOMPLETE = "autocomlete";
+
 
     private static final OkHttpClient okHttpClient = new OkHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -59,7 +65,33 @@ public class AccuwetharModel extends WeatherModel {
                 System.out.println(weatheResponse);
                 break;
 
-            case FIV_DAYS:
+            case FIV_DAYS: // Для пяти дней
+                HttpUrl urlFive = new HttpUrl.Builder()
+                        .scheme(PROTOCOL)   //схема предаем сюдя переменную ПРОТОКОЛ
+                        .host(BASE_HOST)// передаем хост
+                        //передаём элементы пути
+                        .addPathSegment(FORECASTS)
+                        .addPathSegment(VERSION)
+                        .addPathSegment(DAILY)
+                        .addPathSegment(FIV_DAYS)
+                        .addPathSegment(detectCityKey(city))  // элемент города // создаем метод detectCityKey
+                        .addQueryParameter(API_KEY_QUERY_PARAM, API_KEY) // Нужно указать два параметра ключ и его значение
+                        //URL создали билдим его
+                        .build();
+
+                //Должны теперь кинуть туда запрос
+                Request requestFive= new Request.Builder()
+                        .url(urlFive)
+                        .build();
+
+                //Теперь этот реквест нужно закинуть на наш URL
+                Response fiveDayresponse = okHttpClient.newCall(requestFive).execute(); // execute нажимаем на лампочку выбираем add exeption to method signature
+                String weathResponse = fiveDayresponse.body().string(); //Нужно тело ответа перевести в стрингу
+
+                System.out.println(weathResponse);
+                break;
+
+
         }
     }
 
@@ -76,11 +108,11 @@ public class AccuwetharModel extends WeatherModel {
                 .addQueryParameter(API_KEY_QUERY_PARAM,API_KEY)
                 .addQueryParameter("q",city)
                 .build();
-// Собради адрес теперь нужно собрать запрос
+// Собрали адрес теперь нужно собрать запрос
         Request request = new Request.Builder()
                 .url(httpUrl)
                 .get() //явно указываем get
-                .addHeader("accept","application/jaon") // передаем heder что принимается формат json
+                .addHeader("accept","application/json") // передаем heder что принимается формат json
                 .build();
 
         //Теперб отправляем этот запрос с помощью OKhttpKlient
